@@ -116,7 +116,19 @@ public class two_three_tree<K extends Comparable,V> {
             return null;
         }
         Node y = new Node(null);
-        //still didn't finish it
+        if (((K)z.getKey()).compareTo(l.getKey())<0) {
+            set_children(x, z, l, null);
+            set_children(y,m,r,null);
+        } else if (((K)z.getKey()).compareTo(m.getKey())<0) {
+            set_children(x, l, z, null);
+            set_children(y,m,r,null);
+        } else if (((K)z.getKey()).compareTo(r.getKey())<0) {
+            set_children(x, l, m, null);
+            set_children(y,z,r,null);
+        } else {
+            set_children(x, l, m, null);
+            set_children(y,r,z,null);
+        }
         return y;
     }
 }
