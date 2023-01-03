@@ -1,61 +1,76 @@
-public class Node<E> {
-    private E value;
-    private Node<E> left;
-    private Node<E> middle;
-    private Node<E> right;
-    private Node<E> p;
-    private E key;
+public class Node<K,V> {
+    private K key;
+    private Node left;
+    private Node middle;
+    private Node right;
+    private Node p;
+    private V value;
 
-    public Node(E value, Node<E> left, Node<E> middle, Node<E> right, Node<E> p, E key) {
-        this.value = value;
-        this.left = left;
-        this.middle = middle;
-        this.right = right;
-        this.p = p;
+    public Node(K key, Node left, Node middle, Node right, Node p, V value) {
         this.key = key;
-    }
-
-    public Node<E> getLeft() {
-        return left;
-    }
-
-    public void setLeft(Node<E> left) {
         this.left = left;
-    }
-
-    public Node<E> getMiddle() {
-        return middle;
-    }
-
-    public void setMiddle(Node<E> middle) {
         this.middle = middle;
-    }
-
-    public Node<E> getRight() {
-        return right;
-    }
-
-    public void setRight(Node<E> right) {
         this.right = right;
-    }
-
-    public Node<E> getP() {
-        return p;
-    }
-
-    public void setP(Node<E> p) {
         this.p = p;
+        this.value = value;
     }
 
-    public E getKey() {
+    public Node(K key, V value) {
+        this(key,null,null,null,null,value);
+    }
+    public Node(K key) {
+        this(key,null,null,null,null,null);
+    }
+
+    public K getKey() {
         return key;
     }
 
-    public void setKey(E key) {
+    public void setKey(K key) {
         this.key = key;
     }
 
-    public boolean isLeaf() {
-        return this.right == null && this.middle == null && this.left == null;
+    public Node getLeft() {
+        return left;
+    }
+
+    public void setLeft(Node left) {
+        this.left = left;
+    }
+
+    public Node getMiddle() {
+        return middle;
+    }
+
+    public void setMiddle(Node middle) {
+        this.middle = middle;
+    }
+
+    public Node getRight() {
+        return right;
+    }
+
+    public void setRight(Node right) {
+        this.right = right;
+    }
+
+    public Node getP() {
+        return p;
+    }
+
+    public void setP(Node p) {
+        this.p = p;
+    }
+
+    public V getValue() {
+        return value;
+    }
+
+    public void setValue(V value) {
+        this.value = value;
+    }
+
+    public boolean isLeaf(){
+        return this.getLeft()==null && this.getMiddle()==null && this.getRight()==null;
     }
 }
