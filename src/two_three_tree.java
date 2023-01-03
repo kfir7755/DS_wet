@@ -1,5 +1,5 @@
 public class two_three_tree<K extends Comparable,V> {
-    protected Node Root;
+    protected Node<K,V> Root;
     protected String KeyType;
 
     public two_three_tree(Node root, String keyType) {
@@ -57,5 +57,67 @@ public class two_three_tree<K extends Comparable,V> {
 
     }
 
-//    public Node
+    //after watching the rest of pseudocode, there's no need for minimum (or maximum)
+    //but I already wrote it, so I'll leave it just in case
+    public Node two_three_minimum(){
+        Node x=this.getRoot();
+        while (!x.isLeaf()){
+            x=x.getLeft();
+        }
+        x = x.getP().getMiddle();
+        if (this.getKeyType()=="INTEGER"){
+            if (((Integer) x.getKey()).compareTo(Integer.MIN_VALUE) > 0){
+                return x;
+            }
+            else return null;
+        }
+        else{
+            if (((Pair) x.getKey()).compareTo(Pair.min()) > 0){
+                return x;
+            }
+            else return null;
+        }
+    }
+
+    //there should be a successor and predecessor here but there's no need to in pseudocode
+
+    private void update_key(Node x){
+        x.setKey(x.getLeft().getKey());
+        if (x.getMiddle() != null){
+            x.setKey(x.getMiddle().getKey());
+        }
+        if (x.getRight() != null){
+            x.setKey(x.getRight().getKey());
+        }
+    }
+
+    private void set_children(Node x, Node l, Node m, Node r) {
+        x.setLeft(l);
+        x.setMiddle(m);
+        x.setRight(r);
+        l.setP(x);
+        if (m != null) m.setP(x);
+        if (r != null) r.setP(x);
+        update_key(x);
+    }
+
+    private Node insert_and_split(Node x, Node z){
+        Node l = x.getLeft();
+        Node m = x.getMiddle();
+        Node r = x.getRight();
+        if (r == null){
+            if (((K)z.getKey()).compareTo(l.getKey())<0){
+                set_children(x, z, l, m);
+            } else if (((K)z.getKey()).compareTo(m.getKey())<0) {
+                set_children(x, l, z, m);
+            } else{
+                set_children(x, l, m, z);
+            }
+            return null;
+        }
+        Node y = new Node(null);
+        //still didn't finish it
+        return y;
+    }
 }
+
