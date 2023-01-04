@@ -81,7 +81,7 @@ public class two_three_tree<K extends Comparable,V> {
 
     //there should be a successor and predecessor here but there's no need to in pseudocode
 
-    private void update_key(Node x){
+    protected void update_key(Node x){
         x.setKey(x.getLeft().getKey());
         if (x.getMiddle() != null){
             x.setKey(x.getMiddle().getKey());
@@ -91,7 +91,7 @@ public class two_three_tree<K extends Comparable,V> {
         }
     }
 
-    private void set_children(Node x, Node l, Node m, Node r) {
+    protected void set_children(Node x, Node l, Node m, Node r) {
         x.setLeft(l);
         x.setMiddle(m);
         x.setRight(r);
@@ -101,7 +101,7 @@ public class two_three_tree<K extends Comparable,V> {
         update_key(x);
     }
 
-    private Node insert_and_split(Node x, Node z){
+    protected Node insert_and_split(Node x, Node z){
         Node l = x.getLeft();
         Node m = x.getMiddle();
         Node r = x.getRight();
