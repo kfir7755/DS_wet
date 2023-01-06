@@ -1,12 +1,12 @@
 public class Node<K,V> {
     private K key;
-    private Node left;
-    private Node middle;
-    private Node right;
-    private Node p;
+    private Node<K,V> left;
+    private Node<K,V> middle;
+    private Node<K,V> right;
+    private Node<K,V> p;
     private V value;
 
-    public Node(K key, Node left, Node middle, Node right, Node p, V value) {
+    public Node(K key, Node<K,V> left, Node<K,V> middle, Node<K,V> right, Node<K,V> p, V value) {
         this.key = key;
         this.left = left;
         this.middle = middle;
@@ -30,35 +30,35 @@ public class Node<K,V> {
         this.key = key;
     }
 
-    public Node getLeft() {
+    public Node<K,V> getLeft() {
         return left;
     }
 
-    public void setLeft(Node left) {
+    public void setLeft(Node<K,V> left) {
         this.left = left;
     }
 
-    public Node getMiddle() {
+    public Node<K,V> getMiddle() {
         return middle;
     }
 
-    public void setMiddle(Node middle) {
+    public void setMiddle(Node<K,V> middle) {
         this.middle = middle;
     }
 
-    public Node getRight() {
+    public Node<K,V> getRight() {
         return right;
     }
 
-    public void setRight(Node right) {
+    public void setRight(Node<K,V> right) {
         this.right = right;
     }
 
-    public Node getP() {
+    public Node<K,V> getP() {
         return p;
     }
 
-    public void setP(Node p) {
+    public void setP(Node<K,V> p) {
         this.p = p;
     }
 

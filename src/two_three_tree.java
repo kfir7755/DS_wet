@@ -1,40 +1,28 @@
-public class two_three_tree<K extends Comparable,V> {
+public class two_three_tree<K extends Comparable<K>,V> {
     protected Node<K,V> Root;
-    protected String KeyType;
+    protected K max;
+    protected K min;
 
-    public two_three_tree(Node root, String keyType) {
+    public two_three_tree(Node<K,V> root, K max, K min) {
         Root = root;
-        KeyType = keyType;
+        this.max = max;
+        this.min = min;
     }
 
-    public Node getRoot() {
+    public Node<K,V> getRoot() {
         return Root;
     }
 
-    public void setRoot(Node root) {
+    public void setRoot(Node<K,V> root) {
         Root = root;
     }
 
-    public String getKeyType() {
-        return KeyType;
-    }
-
-    public void setKeyType(String keyType) {
-        KeyType = keyType;
-    }
 
     public void two_three_init(){
-        Node x,l,m;
-        if (KeyType.equals("INTEGER")){
-            x = new Node(Integer.MAX_VALUE);
-            l = new Node(Integer.MIN_VALUE);
-            m = new Node(Integer.MAX_VALUE);
-        }
-        else{
-            x = new Node(Pair.max());
-            l = new Node(Pair.min());
-            m = new Node(Pair.max());
-        }
+        Node<K,V> x,l,m;
+        x = new Node<>(max);
+        l = new Node<>(min);
+        m = new Node<>(max);
         l.setP(x);
         m.setP(x);
         x.setLeft(l);
@@ -42,7 +30,7 @@ public class two_three_tree<K extends Comparable,V> {
         this.setRoot(x);
     }
 
-    public Node two_three_search(Node x, K k){
+    public Node<K,V> two_three_search(Node<K,V> x, K k){
         if (x.isLeaf()){
             if(x.getKey().equals(k)) return x;
             else return null;
@@ -59,29 +47,22 @@ public class two_three_tree<K extends Comparable,V> {
 
     //after watching the rest of pseudocode, there's no need for minimum (or maximum)
     //but I already wrote it, so I'll leave it just in case
-    public Node two_three_minimum(){
-        Node x=this.getRoot();
+    public Node<K,V> two_three_minimum(){
+        Node<K,V> x=this.getRoot();
         while (!x.isLeaf()){
             x=x.getLeft();
         }
         x = x.getP().getMiddle();
-        if (this.getKeyType()=="INTEGER"){
-            if (((Integer) x.getKey()).compareTo(Integer.MIN_VALUE) > 0){
-                return x;
-            }
-            else return null;
-        }
-        else{
-            if (((Pair) x.getKey()).compareTo(Pair.min()) > 0){
-                return x;
-            }
-            else return null;
+        if ((x.getKey()).compareTo(min) > 0){
+            return x;
+        } else {
+            return null;
         }
     }
 
     //there should be a successor and predecessor here but there's no need to in pseudocode
 
-    protected void update_key(Node x){
+    protected void update_key(Node<K,V> x){
         x.setKey(x.getLeft().getKey());
         if (x.getMiddle() != null){
             x.setKey(x.getMiddle().getKey());
@@ -91,7 +72,7 @@ public class two_three_tree<K extends Comparable,V> {
         }
     }
 
-    protected void set_children(Node x, Node l, Node m, Node r) {
+    protected void set_children(Node<K,V> x, Node<K,V> l, Node<K,V> m, Node<K,V> r) {
         x.setLeft(l);
         x.setMiddle(m);
         x.setRight(r);
@@ -101,28 +82,28 @@ public class two_three_tree<K extends Comparable,V> {
         update_key(x);
     }
 
-    protected Node insert_and_split(Node x, Node z){
-        Node l = x.getLeft();
-        Node m = x.getMiddle();
-        Node r = x.getRight();
+    protected Node<K,V> insert_and_split(Node<K,V> x, Node<K,V> z){
+        Node<K,V> l = x.getLeft();
+        Node<K,V> m = x.getMiddle();
+        Node<K,V> r = x.getRight();
         if (r == null){
-            if (((K)z.getKey()).compareTo(l.getKey())<0){
+            if ((z.getKey()).compareTo(l.getKey())<0){
                 set_children(x, z, l, m);
-            } else if (((K)z.getKey()).compareTo(m.getKey())<0) {
+            } else if ((z.getKey()).compareTo(m.getKey())<0) {
                 set_children(x, l, z, m);
             } else{
                 set_children(x, l, m, z);
             }
             return null;
         }
-        Node y = new Node(null);
-        if (((K)z.getKey()).compareTo(l.getKey())<0) {
+        Node<K,V> y = new Node<>(null);
+        if ((z.getKey()).compareTo(l.getKey())<0) {
             set_children(x, z, l, null);
             set_children(y,m,r,null);
-        } else if (((K)z.getKey()).compareTo(m.getKey())<0) {
+        } else if ((z.getKey()).compareTo(m.getKey())<0) {
             set_children(x, l, z, null);
             set_children(y,m,r,null);
-        } else if (((K)z.getKey()).compareTo(r.getKey())<0) {
+        } else if ((z.getKey()).compareTo(r.getKey())<0) {
             set_children(x, l, m, null);
             set_children(y,z,r,null);
         } else {
@@ -131,5 +112,42 @@ public class two_three_tree<K extends Comparable,V> {
         }
         return y;
     }
+
+
+    protected void insert(Node<K,V> z){
+
+        Node<K,V> y = this.getRoot();
+        while(!z.isLeaf()) {
+
+            if (z.getKey().compareTo(y.getLeft().getKey()) < 0) {
+                y = y.getLeft();
+            } else if (z.getKey().compareTo(y.getMiddle().getKey()) < 0) {
+                y = y.getMiddle();
+            } else {
+                y = y.getRight();
+            }
+        }
+
+        Node<K,V> x = y.getP();
+        z = insert_and_split(x, z);
+
+        while (x != this.getRoot()) {
+            x = x.getP();
+            if (z != null) {
+                z = insert_and_split(x, z);
+            } else {
+                update_key(x);
+            }
+        }
+
+        if (z != null) {
+            Node<K, V> w = new Node<>(z.getKey());
+            set_children(w, x, z, null);
+            this.setRoot(w);
+        }
+
+    }
+
+
 }
 
