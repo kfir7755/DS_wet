@@ -149,5 +149,96 @@ public class two_three_tree<K extends Comparable<K>,V> {
     }
 
 
+    protected Node<K, V> borrowOrMerge(Node<K,V> y) {
+
+        Node<K,V> z = y.getP();
+        Node<K,V> x;
+
+        if (y == z.getLeft()) {
+
+            x = z.getMiddle();
+
+            if(x.getLeft() != null) {
+                set_children(y, y.getLeft(), x.getLeft(), null);
+                set_children(x, x.getMiddle(), x.getRight(), null);
+            } else {
+                set_children(x, y.getLeft(), x.getLeft(), x.getMiddle());
+                //delete y
+                set_children(z, x, z.getRight(), null);
+            }
+
+            return z;
+
+        }
+
+        if (y == z.getMiddle()) {
+
+            x = z.getLeft();
+
+            if(x.getRight() != null) {
+                set_children(y, x.getRight(), y.getLeft(), null);
+                set_children(x, x.getLeft(), x.getMiddle(), null);
+            } else {
+                set_children(x, x.getLeft(), x.getMiddle(), y.getLeft());
+                //delete y
+                set_children(z, x, z.getRight(), null);
+            }
+
+            return z;
+
+        }
+
+        x = z.getMiddle();
+
+        if(x.getRight() != null) {
+            set_children(y, x.getRight(), y.getLeft(), null);
+            set_children(x, x.getLeft(), x.getMiddle(), null);
+        } else {
+            set_children(x, x.getLeft(), x.getMiddle(), y.getLeft());
+            //delete y
+            set_children(z, x, z.getLeft(), null);
+        }
+
+        return z;
+
+    }
+
+
+    protected void delete(Node<K,V> x) {
+
+        Node<K,V> y = x.getP();
+
+        if (x == y) {
+            set_children(y, y.getMiddle(), y.getRight(), null);
+        } else if (x == y.getMiddle()) {
+            set_children(y, y.getLeft(), y.getRight(), null);
+        } else {
+            set_children(y, y.getLeft(), y.getMiddle(), null);
+        }
+        //delete x
+        while (y != null) {
+
+            if (y.getMiddle() == null) {
+
+                if(y != this.getRoot()) {
+                    y = borrowOrMerge(y);
+                } else {
+                    this.setRoot(y.getLeft());
+                    y.getLeft().setP(null);
+                    //delete y
+                    return;
+                }
+
+            } else {
+                update_key(y);
+                y = y.getP();
+            }
+
+        }
+
+    }
+
+
+
 }
 
