@@ -5,6 +5,7 @@ public class Node<K,V> {
     private Node<K,V> right;
     private Node<K,V> p;
     private V value;
+    private Node<K,V> predecessor;
 
     public Node(K key, Node<K,V> left, Node<K,V> middle, Node<K,V> right, Node<K,V> p, V value) {
         this.key = key;
@@ -72,5 +73,13 @@ public class Node<K,V> {
 
     public boolean isLeaf(){
         return this.getLeft()==null && this.getMiddle()==null && this.getRight()==null;
+    }
+
+    public Node<K, V> getPredecessor() {
+        return predecessor;
+    }
+
+    public void setPredecessor(Node<K, V> predecessor) {
+        this.predecessor = predecessor;
     }
 }

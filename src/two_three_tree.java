@@ -60,7 +60,29 @@ public class two_three_tree<K extends Comparable<K>,V> {
         }
     }
 
-    //there should be a successor and predecessor here but there's no need to in pseudocode
+    public Node<K,V> two_three_predecessor(Node<K,V> x) {
+        Node<K,V> z = x.getP();
+        while (x == z.getLeft()){
+            x = z;
+            z = z.getP();
+        }
+        Node<K,V> y;
+        if (x == z.getRight()){
+            y = z.getMiddle();
+        } else{
+            y = z.getLeft();
+        }
+        while (!y.isLeaf()){
+            if (y.getRight() !=null){
+                y = y.getRight();
+            } else{
+                y = y.getMiddle();
+            }
+        }
+        if (y.getKey().compareTo(min) > 0){
+            return y;
+        } else return null;
+    }
 
     protected void update_key(Node<K,V> x){
         x.setKey(x.getLeft().getKey());
@@ -117,7 +139,7 @@ public class two_three_tree<K extends Comparable<K>,V> {
     protected void insert(Node<K,V> z){
 
         Node<K,V> y = this.getRoot();
-        while(!z.isLeaf()) {
+        while(!y.isLeaf()) {
 
             if (z.getKey().compareTo(y.getLeft().getKey()) < 0) {
                 y = y.getLeft();
@@ -154,11 +176,11 @@ public class two_three_tree<K extends Comparable<K>,V> {
         Node<K,V> z = y.getP();
         Node<K,V> x;
 
-        if (y == z.getLeft()) {
+        if (y.equals(z.getLeft())) {
 
             x = z.getMiddle();
 
-            if(x.getLeft() != null) {
+            if(x.getRight() != null) {
                 set_children(y, y.getLeft(), x.getLeft(), null);
                 set_children(x, x.getMiddle(), x.getRight(), null);
             } else {
@@ -171,7 +193,7 @@ public class two_three_tree<K extends Comparable<K>,V> {
 
         }
 
-        if (y == z.getMiddle()) {
+        if (y.equals(z.getMiddle())) {
 
             x = z.getLeft();
 
@@ -196,7 +218,7 @@ public class two_three_tree<K extends Comparable<K>,V> {
         } else {
             set_children(x, x.getLeft(), x.getMiddle(), y.getLeft());
             //delete y
-            set_children(z, x, z.getLeft(), null);
+            set_children(z, z.getLeft(), x, null);
         }
 
         return z;
@@ -208,7 +230,7 @@ public class two_three_tree<K extends Comparable<K>,V> {
 
         Node<K,V> y = x.getP();
 
-        if (x == y) {
+        if (x == y.getLeft()) /*here we need to check that it is the same object*/ {
             set_children(y, y.getMiddle(), y.getRight(), null);
         } else if (x == y.getMiddle()) {
             set_children(y, y.getLeft(), y.getRight(), null);
