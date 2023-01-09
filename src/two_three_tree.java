@@ -84,6 +84,26 @@ public class two_three_tree<K extends Comparable<K>,V> {
         } else return null;
     }
 
+    public Node<K,V> two_three_successor(Node<K,V> x) {
+        Node<K,V> z = x.getP();
+        while (x == z.getRight() || (z.getRight() == null && x == z.getMiddle())){
+            x = z;
+            z = z.getP();
+        }
+        Node<K,V> y;
+        if (x == z.getLeft()){
+            y = z.getMiddle();
+        } else{
+            y = z.getRight();
+        }
+        while (!y.isLeaf()){
+            y = y.getLeft();
+        }
+        if (y.getKey().compareTo(max) < 0){
+            return y;
+        } else return null;
+    }
+
     protected void update_key(Node<K,V> x){
         x.setKey(x.getLeft().getKey());
         if (x.getMiddle() != null){

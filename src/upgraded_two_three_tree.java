@@ -12,34 +12,26 @@ public class upgraded_two_three_tree<K extends Comparable<K>,V> extends two_thre
         this.right_sentinel = this.getRoot().getMiddle();
     }
 
-    protected Node<K,V> insert_and_split(Node<K,V> x, Node<K,V> z){
-        Node<K,V> l = x.getLeft();
-        Node<K,V> m = x.getMiddle();
-        Node<K,V> r = x.getRight();
-        if (r == null){
-            if ((z.getKey()).compareTo(l.getKey())<0){
-                set_children(x, z, l, m);
-            } else if ((z.getKey()).compareTo(m.getKey())<0) {
-                set_children(x, l, z, m);
+    private void set_leaves_predecessors(Node<K,V> l,Node<K,V> m,Node<K,V> r){
+        if (m.isLeaf()) {
+            if (r != null) {
+                Node<K, V> r_successor = two_three_successor(r);
+                r_successor.setPredecessor(r);
+                r.setPredecessor(m);
+                m.setPredecessor(l);
+                l.setPredecessor(two_three_predecessor(l));
             } else{
-                set_children(x, l, m, z);
+                Node<K, V> m_successor = two_three_successor(m);
+                m_successor.setPredecessor(m);
+                m.setPredecessor(l);
+                l.setPredecessor(two_three_predecessor(l));
             }
-            return null;
         }
-        Node<K,V> y = new Node<>(null);
-        if ((z.getKey()).compareTo(l.getKey())<0) {
-            set_children(x, z, l, null);
-            set_children(y,m,r,null);
-        } else if ((z.getKey()).compareTo(m.getKey())<0) {
-            set_children(x, l, z, null);
-            set_children(y,m,r,null);
-        } else if ((z.getKey()).compareTo(r.getKey())<0) {
-            set_children(x, l, m, null);
-            set_children(y,z,r,null);
-        } else {
-            set_children(x, l, m, null);
-            set_children(y,r,z,null);
-        }
-        return y;
+    }
+
+    @Override
+    protected void set_children(Node<K, V> x, Node<K, V> l, Node<K, V> m, Node<K, V> r) {
+        super.set_children(x, l, m, r);
+        set_leaves_predecessors(l,m,r);
     }
 }
