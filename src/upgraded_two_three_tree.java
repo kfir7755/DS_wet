@@ -44,4 +44,10 @@ public class upgraded_two_three_tree<K extends Comparable<K>,V> extends two_thre
         Node<K, V> z_predecessor = two_three_predecessor(z);
         if (z_predecessor != null) z.setPredecessor(z_predecessor);
     }
+    protected void delete(Node<K, V> z) {
+        Node<K, V> z_successor = two_three_successor(z);
+        Node<K, V> z_predecessor = z.getPredecessor();
+        super.delete(z);
+        if (z_successor != null) z_successor.setPredecessor(z_predecessor);
+    }
 }
