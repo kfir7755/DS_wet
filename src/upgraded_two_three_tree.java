@@ -14,7 +14,6 @@ public class upgraded_two_three_tree<K extends Comparable<K>,V> extends two_thre
 
     private void set_leaves_predecessors(Node<K, V> l, Node<K, V> m, Node<K, V> r) {
         if (m.isLeaf()) {
-            m.setPredecessor(null);
             if (r != null) {
                 r.setPredecessor(m);
 //                if (r.getKey().compareTo(max) < 0) {
