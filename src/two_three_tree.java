@@ -31,7 +31,7 @@ public class two_three_tree<K extends Comparable<K>,V> {
 
     public Node<K,V> two_three_search(Node<K,V> x, K k){
         if (x.isLeaf()){
-            if(x.getKey().equals(k)) return x;
+            if((x.getKey()).compareTo(k) == 0) return x;
             else return null;
         }
         if (k.compareTo(x.getLeft().getKey())<=0){
@@ -195,7 +195,7 @@ public class two_three_tree<K extends Comparable<K>,V> {
         Node<K,V> z = y.getP();
         Node<K,V> x;
 
-        if (y.equals(z.getLeft())) {
+        if (y == z.getLeft()) {
 
             x = z.getMiddle();
 
@@ -212,7 +212,7 @@ public class two_three_tree<K extends Comparable<K>,V> {
 
         }
 
-        if (y.equals(z.getMiddle())) {
+        if (y == z.getMiddle()) {
 
             x = z.getLeft();
 

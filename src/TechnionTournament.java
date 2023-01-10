@@ -38,12 +38,13 @@ public class TechnionTournament implements Tournament{
 
     @Override
     public void addPlayerToFaculty(int faculty_id,Player player) {
-        Player_and_goals pag = new Player_and_goals(player,0);
-        players_tree_by_pid.insert(new Node<Integer, Integer>(player.getId(),0));
-        Pair pair = new Pair (0,player.getId(),player);
-        players_tree_by_goals.insert(new Node<>(pair,player));
+        Player player_copy = new Player(player.getId(),player.getName());
+        Player_and_goals pag = new Player_and_goals(player_copy,0);
+        players_tree_by_pid.insert(new Node<Integer, Integer>(player_copy.getId(),0));
+        Pair pair = new Pair (0,player_copy.getId(),player_copy);
+        players_tree_by_goals.insert(new Node<>(pair,player_copy));
         Node<Integer,Integer> node = faculties_tree_by_fid.two_three_search(faculties_tree_by_fid.getRoot(),faculty_id);
-        Pair points_and_fid = new Pair(node.getValue(),node.getKey(),player);
+        Pair points_and_fid = new Pair(node.getValue(),node.getKey(),player_copy);
         Node<Pair, Player_and_goals[]> faculty_node =
                 faculties_tree_by_points.two_three_search(faculties_tree_by_points.getRoot(),points_and_fid);
         add_player_to_array(pag, faculty_node.getValue());
@@ -101,7 +102,7 @@ public class TechnionTournament implements Tournament{
             players_tree_by_pid.delete(player2_node1);
             player2_node1.setValue(player2_node1.getValue() + 1);
             players_tree_by_pid.insert(player2_node1);
-            add_goal_to_player(pid2,faculty1_node.getValue());
+            add_goal_to_player(pid2,faculty2_node.getValue());
         }
         if (winner == 1 || winner == 0){
             faculties_tree_by_points.delete(faculty1_node);
@@ -211,10 +212,12 @@ public class TechnionTournament implements Tournament{
         Player player_with_max_goals = arr[0].getPlayer();
         int max_goals = arr[0].getGoals();
         for (int i=1;i<maxTeamSize;i++){
-            if (arr[i].getGoals() > max_goals ||
-                    (arr[i].getGoals() == max_goals && arr[i].getPlayer().getId() < player_with_max_goals.getId())){
-                player_with_max_goals = arr[i].getPlayer();
-                max_goals = arr[i].getGoals();
+            if(arr[i] !=null) {
+                if (arr[i].getGoals() > max_goals ||
+                        (arr[i].getGoals() == max_goals && arr[i].getPlayer().getId() < player_with_max_goals.getId())) {
+                    player_with_max_goals = arr[i].getPlayer();
+                    max_goals = arr[i].getGoals();
+                }
             }
         }
         player_to_set.setName(player_with_max_goals.getName());
@@ -224,7 +227,10 @@ public class TechnionTournament implements Tournament{
 
     private void add_goal_to_player(int pid,Player_and_goals[] arr){
         int i=0;
-        while (i<maxTeamSize-1 && arr[i].getPlayer().getId() != pid){
+        while (i<maxTeamSize-1){
+            if (arr[i] != null){
+                if(arr[i].getPlayer().getId() == pid) break;
+            }
             i++;
         }
         arr[i].setGoals(arr[i].getGoals() + 1);
@@ -233,7 +239,10 @@ public class TechnionTournament implements Tournament{
 
     private void remove_player_to_array(int pid,Player_and_goals[] arr){
         int i=0;
-        while (i<maxTeamSize-1 && arr[i].getPlayer().getId() != pid){
+        while (i<maxTeamSize-1){
+            if(arr[i] != null){
+                if( arr[i].getPlayer().getId() == pid) break;
+            }
             i++;
         }
         for(;i<maxTeamSize-1;i++) {

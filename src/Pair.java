@@ -57,10 +57,6 @@ public class Pair<T> implements Comparable<Pair<T>>{
         }
         return 0;
     }
-
-    public boolean equals(Pair p){
-        return this.getMainKey()==p.getMainKey() && this.getSecondaryKey()==p.getSecondaryKey();
-    }
 }
 
 

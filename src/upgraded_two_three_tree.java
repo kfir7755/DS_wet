@@ -13,30 +13,13 @@ public class upgraded_two_three_tree<K extends Comparable<K>,V> extends two_thre
     }
 
     private void set_leaves_predecessors(Node<K, V> l, Node<K, V> m, Node<K, V> r) {
-        if (m.isLeaf()) {
+        if (l.isLeaf()) {
             if (r != null) {
                 r.setPredecessor(m);
-//                if (r.getKey().compareTo(max) < 0) {
-//                    Node<K, V> r_successor = two_three_successor(r);
-//                    if (r_successor != null) {
-//                        r_successor.setPredecessor(r);
-//                    }
-//                }
-            } else {
-//                if (m.getKey().compareTo(max) < 0) {
-//                    Node<K, V> m_successor = two_three_successor(m);
-//                    if (m_successor != null) {
-//                        m_successor.setPredecessor(m);
-//                    }
-//                }
             }
-            m.setPredecessor(l);
-//            if (l.getKey().compareTo(min) > 0) {
-//                Node<K, V> l_predecessor = two_three_predecessor(l);
-//                if (l_predecessor != null) {
-//                    l.setPredecessor(l_predecessor);
-//                }
-//            }
+            if (m != null) {
+                m.setPredecessor(l);
+            }
         }
     }
 
