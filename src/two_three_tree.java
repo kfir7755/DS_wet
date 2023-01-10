@@ -3,8 +3,7 @@ public class two_three_tree<K extends Comparable<K>,V> {
     protected K max;
     protected K min;
 
-    public two_three_tree(Node<K,V> root, K max, K min) {
-        Root = root;
+    public two_three_tree(K max, K min) {
         this.max = max;
         this.min = min;
     }

@@ -1,10 +1,12 @@
-public class Pair implements Comparable<Pair>{
+public class Pair<T> implements Comparable<Pair<T>>{
     private int mainKey;
     private int secondaryKey;
+    private T type;
 
-    public Pair(int mainKey, int secondaryKey) {
+    public Pair(int mainKey, int secondaryKey,T type) {
         this.mainKey = mainKey;
         this.secondaryKey = secondaryKey;
+        this.type = type;
     }
 
     public int getMainKey() {
@@ -23,12 +25,20 @@ public class Pair implements Comparable<Pair>{
         this.secondaryKey = secondaryKey;
     }
 
+    public T getType() {
+        return type;
+    }
+
+    public void setType(T type) {
+        this.type = type;
+    }
+
     public static Pair max(){
-        return new Pair(Integer.MAX_VALUE,Integer.MIN_VALUE);
+        return new Pair(Integer.MAX_VALUE,Integer.MIN_VALUE,null);
     }
 
     public static Pair min(){
-        return new Pair(Integer.MIN_VALUE,Integer.MAX_VALUE);
+        return new Pair(Integer.MIN_VALUE,Integer.MAX_VALUE,null);
     }
 
     @Override

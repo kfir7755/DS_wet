@@ -2,8 +2,8 @@ public class upgraded_two_three_tree<K extends Comparable<K>,V> extends two_thre
 
     private Node<K,V> right_sentinel;
 
-    public upgraded_two_three_tree(Node root, K max, K min) {
-        super(root, max, min);
+    public upgraded_two_three_tree(K max, K min) {
+        super(max, min);
     }
 
     @Override
@@ -14,17 +14,31 @@ public class upgraded_two_three_tree<K extends Comparable<K>,V> extends two_thre
 
     private void set_leaves_predecessors(Node<K,V> l,Node<K,V> m,Node<K,V> r){
         if (m.isLeaf()) {
+            l.setPredecessor(null);
+            m.setPredecessor(null);
             if (r != null) {
-                Node<K, V> r_successor = two_three_successor(r);
-                r_successor.setPredecessor(r);
                 r.setPredecessor(m);
+                if (r.getKey().compareTo(max) < 0) {
+                    Node<K, V> r_successor = two_three_successor(r);
+                    if (r_successor != null) {
+                        r_successor.setPredecessor(r);
+                    }
+                }
                 m.setPredecessor(l);
-                l.setPredecessor(two_three_predecessor(l));
-            } else{
-                Node<K, V> m_successor = two_three_successor(m);
-                m_successor.setPredecessor(m);
+            } else {
                 m.setPredecessor(l);
-                l.setPredecessor(two_three_predecessor(l));
+                if (m.getKey().compareTo(max) < 0) {
+                    Node<K, V> m_successor = two_three_successor(m);
+                    if (m_successor != null) {
+                        m_successor.setPredecessor(m);
+                    }
+                }
+            }
+            if (l.getKey().compareTo(min) > 0) {
+                Node<K, V> l_predecessor = two_three_predecessor(l);
+                if (l_predecessor != null) {
+                    l.setPredecessor(l_predecessor);
+                }
             }
         }
     }
@@ -33,5 +47,11 @@ public class upgraded_two_three_tree<K extends Comparable<K>,V> extends two_thre
     protected void set_children(Node<K, V> x, Node<K, V> l, Node<K, V> m, Node<K, V> r) {
         super.set_children(x, l, m, r);
         set_leaves_predecessors(l,m,r);
+    }
+
+    public Node<K, V> Max() {
+        Node<K,V> p = right_sentinel.getP();
+       if (p.getRight()!=null) return p.getMiddle();
+       return p.getLeft();
     }
 }
